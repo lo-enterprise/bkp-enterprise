@@ -1,0 +1,35 @@
+{
+  "name": "Coin",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "scope": {
+    "where": {
+      "and":[ 
+        {"quantity": {
+          "gt": 0
+        }},
+        {"amount": {
+          "gt": 0
+        }}
+      ]
+    },
+    "order": "amount ASC"
+  },
+  "properties": {
+    "amount": {
+      "type": "number",
+      "required": true
+    },
+    "quantity": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

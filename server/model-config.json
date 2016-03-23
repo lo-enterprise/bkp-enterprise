@@ -31,5 +31,13 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "CoinChange": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Coin": {
+    "dataSource": "db",
+    "public": true
   }
 }
