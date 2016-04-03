@@ -7,13 +7,17 @@
   },
   "scope": {
     "where": {
-      "and":[ 
-        {"quantity": {
-          "gt": 0
-        }},
-        {"amount": {
-          "gt": 0
-        }}
+      "and": [
+        {
+          "quantity": {
+            "gt": 0
+          }
+        },
+        {
+          "amount": {
+            "gt": 0
+          }
+        }
       ]
     },
     "order": "amount ASC"
