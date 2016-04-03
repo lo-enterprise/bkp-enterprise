@@ -11,7 +11,7 @@ It provides REST services in order to:
 
 # Requirement
 
-Last Node JS LTS installed.
+Last Node JS LTS [download](https://nodejs.org/en/download/).
 
 # To install & run
 
