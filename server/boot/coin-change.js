@@ -5,9 +5,10 @@ module.exports = function(app) {
     var CoinChange = app.models.CoinChange;
     var Coin = app.models.Coin;
 
-    CoinChange.beforeCreate = function(next) {
-        var amount = this.amount;
-        var coinChange = this;
+    CoinChange.observe('after save', function(ctx, next) {
+        var coinChange = ctx.instance;
+        var amount = coinChange.amount;
+        var coinChangeId = coinChange.id;
 
         function coinToItem(coin) {
             return {
@@ -24,8 +25,9 @@ module.exports = function(app) {
         function itemToCoin(item) {
             return {
                 amount: item.item.amount,
-                quantity: item.count,
-                id: item.item.id
+                quantity: -item.count,
+                coinId: item.item.id,
+                coinChangeId: coinChangeId
             };
         }
 
@@ -36,41 +38,47 @@ module.exports = function(app) {
             };
         }
 
-        function mergeInCoinChange(coinResult) {
-            coinChange.result = coinResult;
-            return coinChange;
+        function mapReduceChanged(coins) {
+            return _.map(coins, reduceCoin);
         }
 
-        function substract(quantity) {
-            return function(coin) {
-                coin.quantity -= quantity;
-                return coin;
-            };
+        function reduceCoin(coin) {
+            var mapped = mapReduceChanged(coin.changed());
+            return _.reduce(mapped, sumQuantity, coin);
         }
 
-        Coin.find()
+        function sumQuantity(to, from) {
+            if (to.amount === from.amount) {
+                to.quantity += from.quantity;
+            } else {
+                throw new Error('Invalid From' + JSON.stringify(from));
+            }
+            return to;
+        }
+
+        Coin
+            .find({
+                'where': { 'quantity': { 'gt': 0 } },
+                'include': { 'changed': 'changed' }
+            })
+            .then(mapReduceChanged)
             .then(function(coins) {
                 var items = _.map(coins, coinToItem);
                 return bkp.Bounded(items, amount);
             })
             .then(resultToCoinResult)
-            .then(mergeInCoinChange)
-            .then(function(coinChange) {
-                var promises = _.map(coinChange.result.coins,
-                    function(coinResult) {
-                        return Coin
-                            .findById(coinResult.id)
-                            .then(substract(coinResult.quantity))
-                            .then(function(coin) {
-                                return Coin.upsert(coin);
-                            });
-                    });
-                return Promise.all(promises);
+            .then(function(cointResult) {
+                if (cointResult.total !== amount) {
+                    throw new Error('Please Insert Coin ;->');
+                } else {
+                    return cointResult.coins;
+                }
             })
-            .then(function(obj) {
-                console.log(obj);
-                next();
+            .then(function(coins) {
+                // TIPS: return nothing for next success
+                Coin.create(coins);
             })
+            .then(next)
             .catch(next);
-    };
+    });
 };

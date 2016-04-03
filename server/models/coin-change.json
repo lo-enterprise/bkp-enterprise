@@ -9,13 +9,16 @@
     "amount": {
       "type": "number",
       "required": true
-    },
-    "result": {
-      "type": "object"
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "coins": {
+      "type": "hasMany",
+      "model": "Coin",
+      "foreignKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }

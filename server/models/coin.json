@@ -5,23 +5,6 @@
   "options": {
     "validateUpsert": true
   },
-  "scope": {
-    "where": {
-      "and": [
-        {
-          "quantity": {
-            "gt": 0
-          }
-        },
-        {
-          "amount": {
-            "gt": 0
-          }
-        }
-      ]
-    },
-    "order": "amount ASC"
-  },
   "properties": {
     "amount": {
       "type": "number",
@@ -33,7 +16,23 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "source": {
+      "type": "belongsTo",
+      "model": "Coin",
+      "foreignKey": "coinId"
+    },
+    "coinChange": {
+      "type": "belongsTo",
+      "model": "CoinChange",
+      "foreignKey": ""
+    },
+    "changed": {
+      "type": "hasMany",
+      "model": "Coin",
+      "foreignKey": "coinId"
+    }
+  },
   "acls": [],
   "methods": {}
 }
