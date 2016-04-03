@@ -27,6 +27,10 @@
     "type": "git",
     "url": "git+https://github.com/lo-enterprise/bkp-enterprise.git"
   },
+  "bugs": {
+    "url": "https://github.com/lo-enterprise/bkp-enterprise/issues"
+  },
+  "homepage": "https://github.com/lo-enterprise/bkp-enterprise#readme",  
   "license": "ISC",
   "description": "bkp-entreprise"
 }
