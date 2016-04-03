@@ -1,8 +1,8 @@
-This project implements rest services in order to resolve the max change coin problem.
+This project implements rest services in order to resolve the max [change-making problem](https://en.wikipedia.org/wiki/Change-making_problem).
 
 It provides REST services in order to:
-* insert Coin e.g. insert 2 coins of value 1 POST /api/Coins { amount: 1, quantity: 2 }
-* change coin e.g. request change for value 2 POST /api/ChangeCoins  { amount: 2 }
+* insert coins e.g. insert 2 coins of value 1 POST /api/Coins { amount: 1, quantity: 2 }
+* change coin e.g. request change for an amount of 2 POST /api/ChangeCoins  { amount: 2 }
 * retrieve result of change coin e.g. with previous response {id} from ChangeCoin resource GET /api/ChangeCoins/{id}/coins 
    And example of returned result:
 ```
