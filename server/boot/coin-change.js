@@ -26,7 +26,7 @@ module.exports = function(app) {
                 amount: item.item.amount,
                 quantity: item.count,
                 id: item.item.id
-            }
+            };
         }
 
         function resultToCoinResult(result) {
@@ -56,20 +56,21 @@ module.exports = function(app) {
             .then(resultToCoinResult)
             .then(mergeInCoinChange)
             .then(function(coinChange) {
-                var promises = _.map(coinChange.result.coins, function(coinResult) {
-                    return Coin
-                        .findById(coinResult.id)
-                        .then(substract(coinResult.quantity))
-                        .then(function (coin) {
-                            return Coin.upsert(coin);
-                        });
-                });
+                var promises = _.map(coinChange.result.coins,
+                    function(coinResult) {
+                        return Coin
+                            .findById(coinResult.id)
+                            .then(substract(coinResult.quantity))
+                            .then(function(coin) {
+                                return Coin.upsert(coin);
+                            });
+                    });
                 return Promise.all(promises);
             })
-            .then(function (obj) {
+            .then(function(obj) {
                 console.log(obj);
                 next();
             })
             .catch(next);
-      };
+    };
 };
