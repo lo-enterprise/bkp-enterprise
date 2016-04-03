@@ -43,8 +43,7 @@ module.exports = function(app) {
         }
 
         function reduceCoin(coin) {
-            var mapped = mapReduceChanged(coin.changed());
-            return _.reduce(mapped, sumQuantity, coin);
+            return _.reduce(coin.changed(), sumQuantity, coin);
         }
 
         function sumQuantity(to, from) {
@@ -58,8 +57,11 @@ module.exports = function(app) {
 
         Coin
             .find({
-                'where': { 'quantity': { 'gt': 0 } },
-                'include': { 'changed': 'changed' }
+                where: { quantity: { gt: 0 } },
+                include: {
+                    relation: 'changed',
+                    scope: { where: { quantity: { lt: 0 } } }
+                }
             })
             .then(mapReduceChanged)
             .then(function(coins) {
@@ -68,8 +70,12 @@ module.exports = function(app) {
             })
             .then(resultToCoinResult)
             .then(function(cointResult) {
-                if (cointResult.total !== amount) {
-                    throw new Error('Please Insert Coin ;->');
+                var difference = amount - cointResult.total;
+                if (difference > 0) {
+                    throw new Error('Please Insert ' +
+                        difference + ' Coin(s) ;->');
+                } else if (difference < 0) {
+                    throw new Error('Unexpected difference of ' + difference);
                 } else {
                     return cointResult.coins;
                 }
