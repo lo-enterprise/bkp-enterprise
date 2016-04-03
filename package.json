@@ -24,8 +24,8 @@
     "nsp": "^2.1.0"
   },
   "repository": {
-    "type": "",
-    "url": ""
+    "type": "git",
+    "url": "git+https://github.com/lo-enterprise/bkp-enterprise.git"
   },
   "license": "ISC",
   "description": "bkp-entreprise"
