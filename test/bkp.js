@@ -78,12 +78,13 @@ describe('CoinChange#create', function() {
                         .set('Accept', 'application/json')
                         .set('Content-Type', 'application/json')
                         .expect(200, [ 
-                            { amount: 2, quantity: -1, id: 10, 
+                            { amount: 1, quantity: -1, id: 10, 
+                                coinId: 9, coinChangeId: 3 },
+                            { amount: 2, quantity: -1, id: 11, 
                                 coinId: 2, coinChangeId: 3 },
-                            { amount: 5, quantity: -1, id: 11, 
+                            { amount: 5, quantity: -1, id: 12, 
                                 coinId: 5, coinChangeId: 3 },
-                            { amount: 1, quantity: -1, id: 12, 
-                                coinId: 9, coinChangeId: 3 }] ,
+                        ] ,
                         cb);
                 },
             ], done);

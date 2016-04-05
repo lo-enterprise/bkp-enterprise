@@ -64,6 +64,9 @@ module.exports = function(app) {
                 }
             })
             .then(mapReduceChanged)
+            .then(function (coins) {
+                return _.sortBy(coins, 'amount');
+            })
             .then(function(coins) {
                 var items = _.map(coins, coinToItem);
                 return bkp.Bounded(items, amount);
